@@ -1,6 +1,6 @@
 [build]
   base = "05_DEVELOPMENT/frontend"
-  command = "vite build"
+  command = "npm run build"
   publish = "dist"
 
 [[redirects]]
