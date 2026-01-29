@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 43 100% 94%;
+    /* #FFF8E1 */
+    --foreground: 9 28% 20%;
+    /* #3E2723 */
+    --primary: 122 39% 49%;
+    /* #4CAF50 */
+    --primary-foreground: 0 0% 100%;
+    --accent: 36 100% 45%;
+    /* #E68A00 */
+    --accent-foreground: 0 0% 100%;
+    --radius: 2rem;
+  }
+}
+
+body {
+  @apply bg-[#FFF8E1] text-[#3E2723] font-sans antialiased;
+}
+
+.bubble-card {
+  @apply bg-white rounded-[2rem] shadow-xl p-8 border-4 border-[#F5F5F5] transition-all duration-300;
+}
+
+.fiko-button {
+  @apply bg-[#FF9800] text-white px-8 py-4 rounded-2xl font-black shadow-[0_6px_0_0_#E68A00] active:translate-y-1 active:shadow-none transition-all text-center flex items-center justify-center;
+}
+
+input {
+  @apply text-[#3E2723] placeholder:text-[#3E2723]/40;
+}
+
+.video-container {
+  @apply relative w-full aspect-video rounded-3xl overflow-hidden border-4 border-[#F5F5F5] shadow-inner bg-black flex items-center justify-center;
+}
+
+.plan-button {
+  @apply flex-1 p-4 rounded-2xl border-4 border-[#F5F5F5] transition-all flex flex-col items-center gap-1 hover:border-[#4CAF50]/30;
+}
+
+.plan-button.active {
+  @apply border-[#4CAF50] bg-[#4CAF50]/5;
+}
+
+.progress-fill {
+  @apply h-full bg-[#4CAF50] rounded-full transition-all duration-1000 ease-out;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s infinite ease-in-out;
+}
