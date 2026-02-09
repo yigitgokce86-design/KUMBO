@@ -1,124 +1,133 @@
-export type Question = {
+export interface Question {
     id: string
     text: string
     options: string[]
     correctIndex: number
 }
 
-export type Quiz = {
-    questions: Question[]
-}
-
-export type Lesson = {
-    id: string
-    slug: string
-    title: string
-    description: string
-    thumbnail: string
-    videoUrl: string // Could be YouTube ID or local path
-    duration: string
-    quiz: Quiz
-    xpReward: number
-}
-
-export type Module = {
+export interface Lesson {
     id: string
     title: string
     description: string
-    level: number
-    lessons: Lesson[]
-    theme: 'nature' | 'sports' | 'space' // To style the card
+    duration: string // e.g. "3 dk"
+    xp: number
+    isLocked: boolean
+    isCompleted: boolean
+    thumbnail: string // emoji or url
+    category: "basics" | "saving" | "spending"
+    videoUrl: string
+    quiz?: Question[]
 }
 
-export const CONTENT_DATA: Module[] = [
+export const MOCK_LESSONS: Lesson[] = [
     {
-        id: 'm1',
-        title: 'Para Kaşifi',
-        description: 'Paranın ne olduğunu ve nasıl çalıştığını keşfet.',
-        level: 1,
-        theme: 'nature',
-        lessons: [
+        id: "1",
+        title: "Para Nedir?",
+        description: "Paranın tarihini ve ne işe yaradığını öğren.",
+        duration: "2 dk",
+        xp: 50,
+        isLocked: false,
+        isCompleted: false,
+        thumbnail: "💰",
+        category: "basics",
+        videoUrl: "https://www.youtube.com/embed/J7cRjD0u3qA?si=bJz2g7q_iN1q_1q_", // Placeholder
+        quiz: [
             {
-                id: 'l1',
-                slug: 'para-nedir',
-                title: 'Para Nedir?',
-                description: 'Eskiden insanlar alışverişi nasıl yapardı?',
-                thumbnail: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500&auto=format&fit=crop&q=60',
-                videoUrl: 'https://www.youtube.com/embed/1Bw9y7hSkgU', // Nedir? - Para
-                duration: '3 dk',
-                xpReward: 100,
-                quiz: {
-                    questions: [
-                        {
-                            id: 'q1',
-                            text: 'Eskiden insanlar para yerine ne yapardı?',
-                            options: ['Takas yaparlardı', 'Taş toplarlardı', 'Hiçbir şey yapmazlardı'],
-                            correctIndex: 0
-                        },
-                        {
-                            id: 'q2',
-                            text: 'Para bize ne sağlar?',
-                            options: ['Sadece oyuncak', 'İhtiyaçlarımızı almamızı', 'Uçmamızı'],
-                            correctIndex: 1
-                        }
-                    ]
-                }
+                id: "q1",
+                text: "Para ne işe yarar?",
+                options: ["Sadece oyun oynamaya", "İhtiyaçlarımızı almaya", "Duvar boyamaya"],
+                correctIndex: 1
             },
             {
-                id: 'l2',
-                slug: 'istek-mi-ihtiyac-mi',
-                title: 'İstek mi İhtiyaç mı?',
-                description: 'Gerçekten buna ihtiyacın var mı?',
-                thumbnail: 'https://images.unsplash.com/photo-1518458028785-8fbcd101ebb9?w=500&auto=format&fit=crop&q=60',
-                videoUrl: 'https://www.youtube.com/embed/q6Y8y-0x4jA', // EBA TV - İstek ve İhtiyaçlarımız
-                duration: '4 dk',
-                xpReward: 150,
-                quiz: {
-                    questions: [
-                        {
-                            id: 'q1',
-                            text: 'Su içmek bir _____.',
-                            options: ['İstektir', 'İhtiyaçtır', 'Oyundur'],
-                            correctIndex: 1
-                        },
-                        {
-                            id: 'q2',
-                            text: 'Yeni bir video oyunu almak bir _____.',
-                            options: ['İstektir', 'İhtiyaçtır', 'Kuraldır'],
-                            correctIndex: 0
-                        }
-                    ]
-                }
+                id: "q2",
+                text: "Eskiden para yerine ne kullanılırdı?",
+                options: ["Taşlar ve takas", "Kredi kartı", "Bitcoin"],
+                correctIndex: 0
             }
         ]
     },
     {
-        id: 'm2',
-        title: 'Birikim Ustası',
-        description: 'Küçük paralar nasıl büyür?',
-        level: 2,
-        theme: 'sports',
-        lessons: [
+        id: "2",
+        title: "İstek mi, İhtiyaç mı?",
+        description: "Harcama yaparken doğru kararı nasıl verirsin?",
+        duration: "3 dk",
+        xp: 75,
+        isLocked: true,
+        isCompleted: false,
+        thumbnail: "🤔",
+        category: "spending",
+        videoUrl: "https://www.youtube.com/embed/J7cRjD0u3qA",
+        quiz: [
             {
-                id: 'l3',
-                slug: 'kumbaranin-gucu',
-                title: 'Kumbaranın Gücü',
-                description: 'Damlaya damlaya göl olur.',
-                thumbnail: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=500&auto=format&fit=crop&q=60',
-                videoUrl: 'https://www.youtube.com/embed/HwO1dD9hN2F4', // Özlem Denizmen - 3 Kumbara
-                duration: '5 dk',
-                xpReward: 200,
-                quiz: {
-                    questions: [
-                        {
-                            id: 'q1',
-                            text: 'Her gün 1 lira atarsan ne olur?',
-                            options: ['Paran biter', 'Paran birikir', 'Kumbaran kırılır'],
-                            correctIndex: 1
-                        }
-                    ]
-                }
+                id: "q1",
+                text: "Hangisi bir ihtiyaçtır?",
+                options: ["Yeni oyuncak", "Su ve Yemek", "Video oyunu"],
+                correctIndex: 1
             }
         ]
+    },
+    {
+        id: "3",
+        title: "Sabır Gücü",
+        description: "Bekleyerek daha büyük ödüller kazanabilirsin.",
+        duration: "4 dk",
+        xp: 100,
+        isLocked: true,
+        isCompleted: false,
+        thumbnail: "⏳",
+        category: "saving",
+        videoUrl: "https://www.youtube.com/embed/J7cRjD0u3qA"
+    }
+]
+
+export interface Badge {
+    id: string
+    title: string
+    description: string
+    imageUrl: string // emoji for now
+    isEarned: boolean
+    xpReward: number
+}
+
+export const MOCK_BADGES: Badge[] = [
+    {
+        id: "first-step",
+        title: "İlk Adım",
+        description: "İlk hedefini oluşturdun!",
+        imageUrl: "🌱",
+        isEarned: true,
+        xpReward: 50
+    },
+    {
+        id: "saver",
+        title: "Tutumlu",
+        description: "Kumbarana 3 kez para attın.",
+        imageUrl: "🐷",
+        isEarned: true,
+        xpReward: 100
+    },
+    {
+        id: "bookworm",
+        title: "Kitap Kurdu",
+        description: "5 ders tamamladın.",
+        imageUrl: "📚",
+        isEarned: false,
+        xpReward: 150
+    },
+    {
+        id: "astronaut",
+        title: "Astronot",
+        description: "Uzay temasını açtın.",
+        imageUrl: "🚀",
+        isEarned: false,
+        xpReward: 200
+    },
+    {
+        id: "champion",
+        title: "Şampiyon",
+        description: "Tüm hedeflerini tamamladın.",
+        imageUrl: "🏆",
+        isEarned: false,
+        xpReward: 500
     }
 ]

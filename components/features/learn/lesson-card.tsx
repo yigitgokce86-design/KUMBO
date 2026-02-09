@@ -1,63 +1,59 @@
 "use client"
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { PlayCircle, Lock, CheckCircle } from "lucide-react"
-import Link from "next/link"
+import { Lock, PlayCircle, CheckCircle } from "lucide-react"
 import { Lesson } from "@/lib/content-data"
 import { cn } from "@/lib/utils"
 
 interface LessonCardProps {
     lesson: Lesson
-    status: 'locked' | 'unlocked' | 'completed'
+    onClick?: () => void
 }
 
-export function LessonCard({ lesson, status }: LessonCardProps) {
-    const isLocked = status === 'locked'
-    const isCompleted = status === 'completed'
-
+export function LessonCard({ lesson, onClick }: LessonCardProps) {
     return (
-        <Card className={cn(
-            "overflow-hidden transition-all hover:shadow-md",
-            isLocked && "opacity-60 grayscale"
-        )}>
-            <div className="relative h-32 w-full bg-muted">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={lesson.thumbnail} alt={lesson.title} className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    {isLocked ? <Lock className="text-white w-8 h-8" /> : <PlayCircle className="text-white w-10 h-10 hover:scale-110 transition-transform" />}
+        <div
+            onClick={!lesson.isLocked ? onClick : undefined}
+            className={cn(
+                "bg-white p-5 rounded-[1.5rem] relative overflow-hidden transition-all duration-300 group border-2 border-emerald-50 shadow-sm",
+                lesson.isLocked ? "opacity-60 grayscale bg-slate-50" : "hover:border-emerald-200 hover:shadow-[0_8px_20px_-8px_rgba(16,185,129,0.2)] cursor-pointer active:scale-95"
+            )}
+        >
+            {/* Background Gradient Accent */
+                !lesson.isLocked && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
+
+            <div className="flex items-center gap-4 relative z-10">
+                {/* Thumbnail / Icon */}
+                <div className={cn(
+                    "w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm border border-emerald-100",
+                    lesson.isLocked ? "bg-slate-100" : "bg-gradient-to-br from-emerald-100 to-teal-50"
+                )}>
+                    {lesson.isLocked ? <Lock size={24} className="text-slate-400" /> : <span className="scale-125">{lesson.thumbnail}</span>}
                 </div>
-                <Badge className="absolute bottom-2 right-2 bg-black/50 text-white hover:bg-black/70">
-                    {lesson.duration}
-                </Badge>
+
+                {/* Info */}
+                <div className="flex-1">
+                    <h3 className="font-bold text-emerald-950 text-lg leading-tight mb-1 group-hover:text-emerald-700 transition-colors">{lesson.title}</h3>
+                    <p className="text-emerald-900/60 text-xs line-clamp-2 font-medium">{lesson.description}</p>
+
+                    <div className="flex items-center gap-3 mt-2">
+                        <span className="text-xs font-extrabold text-amber-500 flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg">
+                            ✨ {lesson.xp} XP
+                        </span>
+                        <span className="text-xs text-emerald-900/40 font-bold">• {lesson.duration}</span>
+                    </div>
+                </div>
+
+                {/* Status Icon */}
+                <div className="pr-2">
+                    {lesson.isCompleted ? (
+                        <CheckCircle className="text-emerald-500 fill-emerald-100" size={28} />
+                    ) : !lesson.isLocked ? (
+                        <PlayCircle className="text-emerald-300 group-hover:text-emerald-500 transition-colors" size={32} />
+                    ) : null}
+                </div>
             </div>
-
-            <CardHeader className="p-4 pb-2">
-                <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-lg leading-tight">{lesson.title}</h3>
-                    {isCompleted && <CheckCircle className="text-emerald-500 w-5 h-5" />}
-                </div>
-            </CardHeader>
-
-            <CardContent className="p-4 pt-0">
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                    {lesson.description}
-                </p>
-            </CardContent>
-
-            <CardFooter className="p-4 pt-0">
-                <Button
-                    asChild
-                    className="w-full"
-                    variant={isCompleted ? "outline" : "default"}
-                    disabled={isLocked}
-                >
-                    <Link href={isLocked ? '#' : `/learn/${lesson.slug}`}>
-                        {isCompleted ? 'Tekrar İzle' : 'Derse Başla'}
-                    </Link>
-                </Button>
-            </CardFooter>
-        </Card>
+        </div>
     )
 }

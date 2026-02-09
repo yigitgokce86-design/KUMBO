@@ -1,81 +1,73 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(request: NextRequest) {
-    // 1. Beta Gate Check
-    const isBetaPage = request.nextUrl.pathname === '/beta'
-    const isBetaApi = request.nextUrl.pathname === '/api/beta-check'
-    const hasBetaAccess = request.cookies.get('p_beta_access')?.value === 'true'
-
-    if (!hasBetaAccess && !isBetaPage && !isBetaApi) {
-        return NextResponse.redirect(new URL('/beta', request.url))
-    }
-
-    if (hasBetaAccess && isBetaPage) {
-        return NextResponse.redirect(new URL('/', request.url))
-    }
-
-    // 2. Supabase Logic
     let response = NextResponse.next({
         request: {
             headers: request.headers,
         },
-    })
-
-    // If Supabase is not configured, skip middleware logic to avoid errors
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-        return response
-    }
+    });
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             cookies: {
-                get(name: string) {
-                    return request.cookies.get(name)?.value
+                getAll() {
+                    return request.cookies.getAll();
                 },
-                set(name: string, value: string, options: CookieOptions) {
-                    request.cookies.set({
-                        name,
-                        value,
-                        ...options,
-                    })
+                setAll(cookiesToSet) {
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                        request.cookies.set(name, value)
+                    );
                     response = NextResponse.next({
                         request: {
                             headers: request.headers,
                         },
-                    })
-                    response.cookies.set({
-                        name,
-                        value,
-                        ...options,
-                    })
-                },
-                remove(name: string, options: CookieOptions) {
-                    request.cookies.set({
-                        name,
-                        value: '',
-                        ...options,
-                    })
-                    response = NextResponse.next({
-                        request: {
-                            headers: request.headers,
-                        },
-                    })
-                    response.cookies.set({
-                        name,
-                        value: '',
-                        ...options,
-                    })
+                    });
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                        response.cookies.set(name, value, options)
+                    );
                 },
             },
         }
-    )
+    );
 
-    await supabase.auth.getUser()
+    // 1. Beta Gate Check (Enforce BEFORE Auth)
+    const betaCookie = request.cookies.get('p_beta_access');
+    const isBetaPage = request.nextUrl.pathname === '/beta';
+    const isApiRoute = request.nextUrl.pathname.startsWith('/api');
+    // Allow static assets, images, etc.
 
-    return response
+    // NOTE: Next.js middleware matchers usually handle static exclusions, 
+    // but we double check here to be safe and avoid loops.
+    const isStatic = request.nextUrl.pathname.includes('.') || request.nextUrl.pathname.startsWith('/_next');
+
+    if (!betaCookie && !isBetaPage && !isApiRoute && !isStatic) {
+        return NextResponse.redirect(new URL('/beta', request.url));
+    }
+
+    // 2. Auth Check + Routing
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    const path = request.nextUrl.pathname;
+
+    // Protected Routes: Dashboard, Learn, Goals
+    const isProtectedRoute = path.startsWith('/dashboard') || path.startsWith('/learn') || path.startsWith('/goals');
+
+    // If user is NOT logged in and tries to access protected -> Redirect to Login (Landing)
+    if (!user && isProtectedRoute) {
+        return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // If user IS logged in and is on Landing (/) -> Redirect to Dashboard
+    if (user && path === '/') {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    return response;
 }
 
 export const config = {
@@ -87,6 +79,6 @@ export const config = {
          * - favicon.ico (favicon file)
          * Feel free to modify this pattern to include more paths.
          */
-        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+        "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     ],
-}
+};

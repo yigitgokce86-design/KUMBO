@@ -52,7 +52,7 @@ export function LoginForm() {
         setTimeout(() => {
             setUser({ id: 'demo-child-id', name: 'Can', role: 'child' })
             setLoading(false)
-            router.push('/goals')
+            router.push('/dashboard')
         }, 1000)
     }
 
@@ -78,10 +78,10 @@ export function LoginForm() {
     }
 
     return (
-        <Card className="glass-card w-full max-w-md mx-auto border-white/50 dark:border-white/10">
+        <Card className="bg-white w-full max-w-md mx-auto border-4 border-emerald-50 shadow-2xl rounded-[2rem]">
             <CardHeader>
-                <CardTitle className="text-center text-2xl">Giriş Yap</CardTitle>
-                <CardDescription className="text-center">Kumbo hesabına eriş</CardDescription>
+                <CardTitle className="text-center text-3xl font-black text-emerald-950">Giriş Yap</CardTitle>
+                <CardDescription className="text-center text-emerald-700 font-medium">Kumbo hesabına eriş</CardDescription>
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="child" className="w-full">
@@ -109,7 +109,7 @@ export function LoginForm() {
                                         id="pin"
                                         type="password"
                                         placeholder="****"
-                                        className="text-center text-2xl tracking-widest h-14"
+                                        className="text-center text-3xl tracking-[1em] h-20 bg-emerald-50 border-2 border-emerald-100 text-emerald-900 rounded-2xl focus-visible:ring-emerald-400 placeholder:tracking-normal placeholder:text-emerald-900/20 font-black"
                                         maxLength={4}
                                         {...childForm.register("pin")}
                                     />

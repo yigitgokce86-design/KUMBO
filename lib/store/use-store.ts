@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { createClient } from '@/lib/supabase/client' // Use the client-side client
+import { createClient } from '@/lib/supabase/client'
+import { Badge, MOCK_BADGES } from '@/lib/content-data'
 
 export interface Goal {
     id: string
@@ -25,40 +26,135 @@ interface StoreState {
     // Learning Progress
     xp: number
     completedLessons: string[] // List of lesson IDs
+    badges: Badge[]
 
     // Actions
     fetchGoals: () => Promise<void>
-    addMoney: (goalId: string, amount: number) => Promise<void>
+    fetchUser: () => Promise<void>
+    fetchBadges: () => Promise<void>
+    addMoney: (goalId: string, amount: number, description?: string) => Promise<void>
     setUser: (user: User | null) => void
     logout: () => Promise<void>
     completeLesson: (lessonId: string, xpReward: number) => Promise<void>
+    checkBadges: () => Promise<void>
 }
 
 export const useStore = create<StoreState>((set, get) => ({
-    user: null, // Initial state is null, will be populated by AuthProvider or manual fetch
+    user: null,
     goals: [],
     isLoading: false,
 
     xp: 0,
     completedLessons: [],
+    badges: MOCK_BADGES,
 
     setUser: (user) => set({ user }),
 
-    completeLesson: async (lessonId, xpReward) => {
-        const { completedLessons, xp } = get()
+    fetchUser: async () => {
+        const supabase = createClient()
+        const { data: { user: authUser } } = await supabase.auth.getUser()
 
-        // Prevent double reward
+        if (authUser) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', authUser.id)
+                .single()
+
+            if (profile) {
+                set({
+                    user: {
+                        id: profile.id,
+                        name: profile.display_name,
+                        role: profile.role,
+                        email: authUser.email
+                    },
+                    xp: profile.xp || 0
+                })
+                get().fetchBadges()
+            }
+        }
+    },
+
+    fetchBadges: async () => {
+        const supabase = createClient()
+        const { user, badges } = get()
+        if (!user) return
+
+        const { data: earnedBadges } = await supabase
+            .from('user_badges')
+            .select('badge_id')
+            .eq('user_id', user.id)
+
+        if (earnedBadges) {
+            const earnedIds = earnedBadges.map(b => b.badge_id)
+            const updatedBadges = badges.map(b => ({
+                ...b,
+                isEarned: earnedIds.includes(b.id)
+            }))
+            set({ badges: updatedBadges })
+        }
+    },
+
+    checkBadges: async () => {
+        const { user, goals, completedLessons, badges } = get()
+        if (!user) return
+
+        const supabase = createClient()
+        const newEarnedBadges: string[] = []
+
+        const checks = [
+            { id: 'first-step', condition: goals.length > 0 },
+            { id: 'saver', condition: goals.some(g => g.currentAmount > 0) },
+            { id: 'bookworm', condition: completedLessons.length >= 5 },
+            { id: 'champion', condition: goals.some(g => g.status === 'completed') }
+        ]
+
+        for (const check of checks) {
+            const badge = badges.find(b => b.id === check.id)
+            // Only award if not already earned
+            if (badge && !badge.isEarned && check.condition) {
+                newEarnedBadges.push(check.id)
+
+                // Award in DB
+                await supabase.from('user_badges').insert({
+                    user_id: user.id,
+                    badge_id: check.id
+                })
+
+                // Award XP
+                await supabase.rpc('increment_xp', { x: badge.xpReward })
+
+                // Optimistic XP update
+                set(state => ({ xp: state.xp + badge.xpReward }))
+            }
+        }
+
+        if (newEarnedBadges.length > 0) {
+            get().fetchBadges()
+        }
+    },
+
+    completeLesson: async (lessonId, xpReward) => {
+        const { completedLessons, xp, user } = get()
+        if (!user) return
+
         if (completedLessons.includes(lessonId)) return
 
-        // Optimistic Update
         set({
             completedLessons: [...completedLessons, lessonId],
             xp: xp + xpReward
         })
 
-        // TODO: Sync with Supabase 'progress' table in Phase 7
-        // const supabase = createClient()
-        // await supabase.from('progress').insert(...)
+        const supabase = createClient()
+        await supabase.from('user_lesson_progress').insert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            status: 'completed'
+        })
+
+        await supabase.rpc('increment_xp', { x: xpReward })
+        get().checkBadges()
     },
 
     fetchGoals: async () => {
@@ -73,19 +169,17 @@ export const useStore = create<StoreState>((set, get) => ({
 
             if (error) throw error
 
-            // Map database snake_case to typescript camelCase if needed, 
-            // but for now let's assume we align or map manually.
-            // valid way:
             const mappedGoals: Goal[] = (data || []).map(g => ({
                 id: g.id,
                 title: g.title,
-                targetAmount: Number(g.target_amount), // Numeric returns as string sometimes
+                targetAmount: Number(g.target_amount),
                 currentAmount: Number(g.current_amount),
-                imageUrl: g.image_url || '/assets/placeholder.png', // Fallback
+                imageUrl: g.image_url || '/assets/placeholder.png',
                 status: g.status
             }))
 
             set({ goals: mappedGoals })
+            get().checkBadges()
         } catch (error) {
             console.error('Error fetching goals:', error)
         } finally {
@@ -93,22 +187,21 @@ export const useStore = create<StoreState>((set, get) => ({
         }
     },
 
-    addMoney: async (goalId, amount) => {
+    addMoney: async (goalId, amount, description = 'Hızlı Ekleme') => {
         const supabase = createClient()
         const user = get().user
         if (!user) return
 
-        // Optimistic Update
         set(state => ({
             goals: state.goals.map(g =>
                 g.id === goalId
                     ? { ...g, currentAmount: g.currentAmount + amount }
                     : g
-            )
+            ),
+            xp: state.xp + 10
         }))
 
         try {
-            // 1. Insert Transaction
             const { error: txError } = await supabase
                 .from('transactions')
                 .insert({
@@ -116,40 +209,22 @@ export const useStore = create<StoreState>((set, get) => ({
                     goal_id: goalId,
                     amount: amount,
                     type: 'deposit',
-                    description: 'Hızlı Ekleme (Kumbaraya At)'
+                    description: description
                 })
 
             if (txError) throw txError
 
-            // 2. Update Goal Amount
-            // We use a clean RPC or just simple update if simpler:
-            // Let's do a simple get-then-update or database trigger ideally.
-            // For now, client-side calculation is risky but okay for OLP.
-            // Better: use the current value from the DB.
+            await supabase.rpc('update_goal_amount', {
+                goal_id: goalId,
+                amount_to_add: amount
+            })
 
-            // Re-fetch specific goal to be safe or just increment
-            // Supabase doesn't have a simple "increment" atomic operator in JS client without RPC.
-            // So we will rely on the optimistic update + background re-fetch or use a simple update query.
-
-            // Let's fetch the latest to ensure consistency
-            const { data: goalData } = await supabase
-                .from('goals')
-                .select('current_amount')
-                .eq('id', goalId)
-                .single()
-
-            if (goalData) {
-                const newAmount = Number(goalData.current_amount) + amount
-                await supabase
-                    .from('goals')
-                    .update({ current_amount: newAmount })
-                    .eq('id', goalId)
-            }
+            await supabase.rpc('increment_xp', { x: 10 })
+            get().checkBadges()
 
         } catch (error) {
             console.error("Error adding money:", error)
-            // Rollback on error could go here
-            get().fetchGoals() // Re-sync
+            get().fetchGoals()
         }
     },
 
