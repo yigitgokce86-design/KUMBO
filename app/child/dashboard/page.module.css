@@ -1,0 +1,111 @@
+.container {
+    min-height: 100vh;
+    padding: 1.5rem;
+    padding-bottom: 6rem;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.greeting {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 0.25rem;
+}
+
+.streakBadge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+    /* Orange shadow */
+    font-weight: 700;
+    color: #f97316;
+    /* Orange 500 */
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.actionGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.actionCardWrapper:first-child {
+    grid-column: span 2;
+    /* Make the first card (Earn/Tasks) wide */
+}
+
+.actionCard {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 160px;
+    gap: 0.75rem;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.actionCard:active {
+    transform: scale(0.96);
+}
+
+.earnCard {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(168, 85, 247, 0.9) 100%) !important;
+}
+
+.saveCard {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(52, 211, 153, 0.9) 100%) !important;
+}
+
+.learnCard {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.9) 0%, rgba(251, 191, 36, 0.9) 100%) !important;
+}
+
+.iconCircle {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    backdrop-filter: blur(4px);
+}
+
+.actionTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+}
+
+.actionDesc {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}

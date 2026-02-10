@@ -1,0 +1,68 @@
+.card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mainContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.childBadge {
+    background: var(--gradient-secondary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.statusBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.pending {
+    color: var(--warning);
+}
+
+.approved {
+    color: var(--success);
+}
+
+.available {
+    color: var(--muted);
+}
+
+.title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.reward {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--success);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

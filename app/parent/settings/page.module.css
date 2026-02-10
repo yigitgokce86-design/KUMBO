@@ -1,0 +1,141 @@
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.backButton {
+    margin-right: 1rem;
+    color: var(--slate-600);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.backButton:hover {
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--indigo-600);
+}
+
+.pageTitle {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--indigo-600), var(--purple-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--slate-700);
+    margin-bottom: 1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.childHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+    font-size: 2.5rem;
+    width: 64px;
+    height: 64px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.childName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--indigo-900);
+    margin: 0;
+}
+
+.balance {
+    font-size: 0.875rem;
+    color: var(--slate-500);
+}
+
+.balanceValue {
+    color: var(--emerald-600);
+    font-weight: 600;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--slate-600);
+}
+
+.inputRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input {
+    padding: 0.75rem;
+    border-radius: 12px;
+    border: 1px solid var(--slate-200);
+    background: rgba(255, 255, 255, 0.8);
+    font-family: inherit;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--indigo-400);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.payButton {
+    margin-top: auto;
+}
+
+.lastPaid {
+    font-size: 0.75rem;
+    color: var(--slate-400);
+    text-align: center;
+    margin-top: 0.5rem;
+}

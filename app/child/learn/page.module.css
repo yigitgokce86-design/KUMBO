@@ -1,0 +1,72 @@
+.container {
+    min-height: 100vh;
+    padding: 1.5rem;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.backButton {
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.backButton:hover {
+    color: var(--foreground);
+}
+
+.pageTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--foreground);
+}
+
+.heroSection {
+    background: var(--gradient-secondary);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+}
+
+.heroIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroText {
+    flex: 1;
+}
+
+.heroTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.heroSubtitle {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.lessonList {
+    display: flex;
+    flex-direction: column;
+}

@@ -1,0 +1,69 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.pending {
+    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.iconBox {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.iconActive {
+    background: var(--gradient-gold);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+}
+
+.iconPending {
+    background: var(--muted);
+}
+
+.title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.reward {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--success);
+    font-size: 0.875rem;
+}
+
+.statusBadge {
+    background: var(--muted);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.statusBadgeApproved {
+    background: var(--success);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
