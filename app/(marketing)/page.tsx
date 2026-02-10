@@ -70,7 +70,7 @@ export default function Home() {
               <Character variant="guide" size="lg" />
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl rounded-3xl overflow-hidden relative">
+            <div className="clay-card p-1 relative overflow-hidden bg-white/60 backdrop-blur-md">
               <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-emerald-400 to-teal-500" />
               <LoginForm />
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
         </div>
 
         {/* FEATURES STRIP */}
-        <div className="bg-white/50 backdrop-blur-sm border-t border-slate-100 py-12">
+        <div className="bg-white/50 backdrop-blur-sm border-t border-emerald-100 py-12">
           <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8">
 
             <FeatureCard
@@ -114,14 +114,14 @@ export default function Home() {
 function FeatureCard({ icon, title, desc, color }: { icon: React.ReactNode, title: string, desc: string, color: string }) {
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      className={`p-6 rounded-2xl border ${color} flex flex-col items-center text-center space-y-4 shadow-sm hover:shadow-md transition-all cursor-default`}
+      whileHover={{ y: -8 }}
+      className={`clay-card p-8 flex flex-col items-center text-center space-y-4 cursor-default ${color}`}
     >
-      <div className="p-4 bg-white rounded-full shadow-sm">
+      <div className="p-4 bg-white rounded-full shadow-sm ring-4 ring-white/50">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-slate-800">{title}</h3>
-      <p className="text-slate-600 leading-relaxed">
+      <h3 className="text-xl font-black text-slate-800">{title}</h3>
+      <p className="text-slate-600 font-medium leading-relaxed">
         {desc}
       </p>
     </motion.div>

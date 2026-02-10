@@ -1,109 +1,119 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
-    --background: 175 60% 97%;
-    --foreground: 164 86% 16%;
-    --card: 0 0% 100%;
-    --card-foreground: 164 86% 16%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 164 86% 16%;
-    --primary: 151 86% 39%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 154 75% 90%;
-    --secondary-foreground: 166 87% 20%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 45 93% 77%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 154 50% 80%;
-    --input: 154 50% 90%;
-    --ring: 151 86% 39%;
-    --radius: 1rem;
-  }
-}
+    /* Vibrant Pastel Palette */
+    --background: #F0FDFA;
+    /* Soft Mint White */
+    --foreground: #064E3B;
+    /* Emerald-900 */
 
-@layer base {
+    --card: #ffffff;
+    --card-foreground: #064E3B;
+
+    --popover: #ffffff;
+    --popover-foreground: #064E3B;
+
+    /* Primary: Mint Green */
+    --primary: #10B981;
+    /* Emerald-500 */
+    --primary-foreground: #ffffff;
+
+    /* Secondary: Sunshine Yellow */
+    --secondary: #FDE68A;
+    --secondary-foreground: #92400E;
+
+    /* Muted / Neutral */
+    --muted: #F1F5F9;
+    --muted-foreground: #64748B;
+
+    /* Callouts */
+    --accent: #7DD3FC;
+    /* Sky Blue */
+    --accent-foreground: #0C4A6E;
+
+    --destructive: #EF4444;
+    --destructive-foreground: #ffffff;
+
+    --border: #A7F3D0;
+    --input: #F0FDFA;
+    --ring: #10B981;
+    --radius: 1.5rem;
+    /* Rounder by default */
+  }
+
   body {
-    background-color: #F0FDFA;
-    color: #064E3B;
+    background-color: var(--background);
+    background-image:
+      radial-gradient(at 0% 0%, rgba(255, 255, 255, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, rgba(209, 250, 229, 0.5) 0, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(254, 240, 138, 0.3) 0, transparent 50%);
+    color: var(--foreground);
     font-family: var(--font-quicksand), sans-serif;
-    background-image: radial-gradient(circle at 50% 0%, #D1FAE5 0%, #F0FDFA 100%);
+    min-height: 100vh;
     background-attachment: fixed;
   }
 }
 
-/* Custom Utilities for New Design System */
+/* Claymorphism Design System */
 @layer components {
-  .toy-card {
-    background-color: white;
-    border-radius: 2rem;
-    /* Rounder */
-    border: 3px solid #E2E8F0;
-    /* Slate-200 */
-    box-shadow: 0 8px 0 0 #CBD5E1;
-    /* Slate-300 - Hard shadow */
-    transition: all 150ms ease-in-out;
+
+  /* Buttons that look like 3D soft plastic */
+  .clay-btn-primary {
+    @apply bg-emerald-400 text-white font-black rounded-2xl transition-all active:translate-y-1 active:shadow-none;
+    box-shadow:
+      0 4px 0 0 #059669,
+      /* Darker shade of emerald for depth */
+      0 8px 16px -4px rgba(16, 185, 129, 0.4);
+    /* Glow */
   }
 
-  .toy-card:hover {
+  .clay-btn-primary:hover {
+    @apply bg-emerald-300;
     transform: translateY(-2px);
-    box-shadow: 0 12px 0 0 #CBD5E1;
+    box-shadow:
+      0 6px 0 0 #059669,
+      0 12px 20px -4px rgba(16, 185, 129, 0.5);
   }
 
-  .toy-button {
-    border-radius: 1rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 150ms;
-    border: 2px solid transparent;
+  .clay-btn-secondary {
+    @apply bg-yellow-300 text-yellow-900 font-black rounded-2xl transition-all active:translate-y-1 active:shadow-none;
+    box-shadow:
+      0 4px 0 0 #D97706,
+      /* Amber-600 */
+      0 8px 16px -4px rgba(250, 204, 21, 0.4);
   }
 
-  .toy-button:active {
-    transform: translateY(4px);
-    box-shadow: none !important;
+  .clay-btn-secondary:hover {
+    @apply bg-yellow-200;
+    transform: translateY(-2px);
+    box-shadow:
+      0 6px 0 0 #D97706,
+      0 12px 20px -4px rgba(250, 204, 21, 0.5);
   }
 
-  .toy-input {
-    background-color: #F8FAFC;
-    /* Slate-50 */
-    border: 3px solid #E2E8F0;
-    /* Slate-200 */
-    border-radius: 1rem;
-    padding: 1rem;
-    font-weight: 700;
-    color: #334155;
-    /* Slate-700 */
-    transition: all 150ms;
-    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  /* Cards that look like floating soft clay */
+  .clay-card {
+    @apply bg-white rounded-3xl border-2 border-slate-100/50;
+    box-shadow:
+      8px 8px 24px -4px rgba(0, 0, 0, 0.05),
+      -4px -4px 12px -2px rgba(255, 255, 255, 0.8),
+      /* Highlight top-left */
+      inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+    /* Inner rim */
   }
 
-  .toy-input:focus {
-    background-color: white;
-    border-color: #10B981;
-    /* Emerald-500 */
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+  /* Inputs that look pressed into the surface */
+  .clay-input {
+    @apply bg-slate-50 border-none rounded-2xl text-slate-700 font-bold transition-all;
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.05),
+      inset -2px -2px 5px rgba(255, 255, 255, 1);
   }
 
-  .glass-card {
-    /* Legacy override - turn glass into soft cards */
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
-    border: 1px solid #D1FAE5;
-    border-radius: 1rem;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  }
-
-  .glass-panel {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border-radius: 1.5rem;
-    border: 1px solid #ECFDF5;
+  .clay-input:focus {
+    @apply bg-white ring-4 ring-emerald-100;
+    box-shadow:
+      0 4px 12px -2px rgba(16, 185, 129, 0.2);
   }
 }

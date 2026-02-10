@@ -107,7 +107,7 @@ export function LoginForm() {
                                     id="pin"
                                     type="password"
                                     placeholder="••••"
-                                    className="relative text-center text-4xl tracking-[0.4em] h-20 bg-white border-2 border-emerald-100 text-emerald-600 rounded-2xl focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100/50 shadow-sm placeholder:text-emerald-100 font-black transition-all"
+                                    className="clay-input text-center text-4xl tracking-[0.4em] h-20 text-emerald-600 placeholder:text-emerald-100/50"
                                     maxLength={4}
                                     {...childForm.register("pin")}
                                 />
@@ -119,7 +119,7 @@ export function LoginForm() {
 
                         <Button
                             type="submit"
-                            className="w-full h-14 text-lg rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-lg shadow-emerald-200 hover:shadow-xl hover:shadow-emerald-300 hover:-translate-y-1 active:translate-y-0 transition-all font-bold"
+                            className="w-full h-16 text-xl clay-btn-primary"
                             disabled={loading}
                         >
                             {loading ? "GİRİLİYOR..." : <span className="flex items-center">BAŞLA <ArrowRight className="ml-2 w-5 h-5" /></span>}
@@ -135,7 +135,7 @@ export function LoginForm() {
                                 id="email"
                                 type="email"
                                 placeholder="ornek@kumbo.app"
-                                className="h-12 bg-slate-50 border-slate-200 focus:bg-white transition-all rounded-xl"
+                                className="h-12 clay-input"
                                 {...parentForm.register("email")}
                             />
                             {parentForm.formState.errors.email && (
@@ -147,7 +147,7 @@ export function LoginForm() {
                             <Input
                                 id="password"
                                 type="password"
-                                className="h-12 bg-slate-50 border-slate-200 focus:bg-white transition-all rounded-xl"
+                                className="h-12 clay-input"
                                 {...parentForm.register("password")}
                             />
                             {parentForm.formState.errors.password && (
@@ -158,7 +158,7 @@ export function LoginForm() {
                         <div className="pt-2 space-y-3">
                             <Button
                                 type="submit"
-                                className="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold shadow-md hover:shadow-lg transition-all"
+                                className="w-full h-12 clay-btn-primary bg-slate-900 shadow-slate-900/20 hover:bg-slate-800"
                                 disabled={loading}
                             >
                                 {loading ? "Kontrol ediliyor..." : "Giriş Yap"}
